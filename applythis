@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -aeuo pipefail
+
+ver="v0.1.0"
+
+if [[ "${1:-}" == "help" ]]; then
+    echo """This command allows to create/apply Kubernetes resources directly from editor.
+
+Usage:
+  kubectl applythis
+
+This will open the editor defined by your KUBE_EDITOR, or EDITOR environment variables, or fall back to 'vi'.
+Once text editor opens, enter/paste your yaml and save the file. It will be applied to Kubernetes."""
+    exit 0
+fi
+
+if [[ "${1:-}" == "version" ]]; then
+    echo "$ver"
+    exit 0
+fi
+
+if [[ -n "${1:-}" ]]; then
+    echo "unsupported argument \"${1}\""
+    exit 1
+fi
+
+editor=vi
+if [[ -n "${EDITOR:-}" ]]; then
+	editor="${EDITOR}"
+fi
+if [[ -n "${KUBE_EDITOR:-}" ]]; then
+	editor="${KUBE_EDITOR}"
+fi
+
+tmpfile=$(mktemp)
+
+"${editor}" "${tmpfile}"
+
+kubectl apply -f "${tmpfile}"
+rm "${tmpfile}"

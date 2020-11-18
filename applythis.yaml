@@ -1,0 +1,25 @@
+
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: applythis
+spec:
+  homepage: https://github.com/turkenh/kubectl-applythis
+  shortDescription: Directly create/apply yaml files without writing into file.
+  version: v0.1.0
+  description: |
+    A simple kubectl plugin that allows to create/apply Kubernetes resources directly from editor.
+  platforms:
+  - selector:
+      matchExpressions:
+      - key: os
+        operator: In
+        values:
+        - darwin
+        - linux
+    uri: #TODO
+    sha256: #TODO
+    bin: applythis
+    files:
+    - from: *
+      to: .
